@@ -14,6 +14,7 @@ const imagemin = require("gulp-imagemin");
 
 const browserSyncServer = require("browser-sync").create();
 
+//Ajoute des sourcesmap, ...
 const styles = () => {
 	return gulp.src( './src/sass/**/*.scss')
 	.pipe(sourcemaps.init())
@@ -38,12 +39,14 @@ const javascript = () => {
 	  .pipe(browserSyncServer.stream());
 }
 
+//Surveille les fichiers
 const watchFiles = () => {
 	gulp.watch("./src/sass/**/*.scss", styles);
 	gulp.watch("./src/js/**/*.js", javascript);
 	gulp.watch("./*.html", browserReload);
 }
 
+//Lance un localhost
 const browserSync = (done) => {
 	browserSyncServer.init({
 		server: {
@@ -54,10 +57,12 @@ const browserSync = (done) => {
 	  done();
 }
 
+//Relance la page
 const browserReload = () => {
 	browserSyncServer.reload();
 }
 
+//Compresse les images
 const compressImages = () => {
 	return gulp.src([
 		 './src/images/**/*',
@@ -71,7 +76,7 @@ const compressImages = () => {
 }
 
 const build = gulp.series(styles, javascript);
-const watch = gulp.parallel(watchFiles, browserSync, browserReload);
+const watch = gulp.parallel(watchFiles, browserSync);
 const compress = gulp.series(compressImages);
 
 exports.watch = watch;
